@@ -32,9 +32,13 @@ void AAuraEffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	UE_LOG(LogTemp, Warning, TEXT("Effector Overlap"));
 	if (IAbilitySystemInterface* AbilitySystemInterface = Cast<IAbilitySystemInterface>(OtherActor))
 	{
-		const UAuraAttributeSet* AttributeSet = Cast<UAuraAttributeSet>(AbilitySystemInterface->GetAbilitySystemComponent()->GetAttributeSet(UAuraAttributeSet::StaticClass()));
+		const UAuraAttributeSet* AttributeSet = 
+			Cast<UAuraAttributeSet>(
+				AbilitySystemInterface->GetAbilitySystemComponent()
+				->GetAttributeSet(UAuraAttributeSet::StaticClass()));
 		UAuraAttributeSet* MutebleAttributeSet = const_cast<UAuraAttributeSet*>(AttributeSet);
-		MutebleAttributeSet->SetHealth(AttributeSet->GetHealth() + 25.0f);
+		//MutebleAttributeSet->SetHealth(AttributeSet->GetHealth() + 25.0f);
+		MutebleAttributeSet->SetMana(AttributeSet->GetMana() + 25.0f);
 	}
 }
 

@@ -3,6 +3,10 @@
 
 #include "Character/AuraCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/AuraPlayerState.h"
+#include "AbilitySystemComponent.h"
+#include "UI/HUD/AuraHUD.h"
+#include "Player/AuraPlayerController.h"
 
 AAuraCharacter::AAuraCharacter()
 {
@@ -15,4 +19,41 @@ AAuraCharacter::AAuraCharacter()
 	bUseControllerRotationRoll = false;
 	bUseControllerRotationYaw = false;
 
+}
+
+void AAuraCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	//UE_LOG(LogTemp, Warning, TEXT("PossessedBy"));
+	//Init Actor info for server
+	InitAbilityActorInfo();
+}
+
+void AAuraCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+	//Init Actor info for Client
+	InitAbilityActorInfo();
+	//UE_LOG(LogTemp, Warning, TEXT("OnRep_PlayerState"));
+}
+
+void AAuraCharacter::InitAbilityActorInfo()
+{
+	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	UAbilitySystemComponent* AbilitySystem = AuraPlayerState->GetAbilitySystemComponent();
+	check(AbilitySystem);
+	AbilitySystem->InitAbilityActorInfo(AuraPlayerState, this);
+	AbilitySystemComponent = AbilitySystem;
+	AttributeSet = AuraPlayerState->GetAttributeSet();
+
+	//init aurahud
+	if (AAuraPlayerController* AuraController = Cast<AAuraPlayerController>(GetController()))
+	{
+		if (AAuraHUD* AuraHUD = Cast<AAuraHUD>(AuraController->GetHUD()))
+		{
+			AuraHUD->InitOverlay(Cast<APlayerController>(GetController()),
+				AuraPlayerState, AbilitySystemComponent, AttributeSet);
+		}
+	}
 }

@@ -23,5 +23,7 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	bool bHighLighted = false;
+protected:
 
+	virtual void BeginPlay() override;
 };

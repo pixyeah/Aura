@@ -22,8 +22,15 @@ AAuraEnemy::AAuraEnemy()
 
 void AAuraEnemy::BeginPlay()
 {
-	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	Super::BeginPlay();
+	InitAbilityActorInfo();
 
+}
+
+void AAuraEnemy::InitAbilityActorInfo()
+{
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 }
 
 void AAuraEnemy::HighlightActor()

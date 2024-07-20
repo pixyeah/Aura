@@ -68,6 +68,11 @@ protected:
 
 
 	TMap<FActiveGameplayEffectHandle, class UAbilitySystemComponent*> ActiveEffectHandleMap;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effect")
+	float EffectLevel = 1.0f;
+
+
 private:
 	
 

@@ -44,7 +44,10 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 
 	Super::PostGameplayEffectExecute(Data);
 
+	FEffectProperties EffectProperties;
+	SetEffectPropertis(Data, EffectProperties);
 
+	UE_LOG(LogTemp, Warning, TEXT("%f "), Data.EvaluatedData.Magnitude);
 }
 
 

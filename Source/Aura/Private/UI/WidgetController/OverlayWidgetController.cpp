@@ -3,6 +3,7 @@
 
 #include "UI/WidgetController/OverlayWidgetController.h"
 #include "AbilitySystem/AuraAttributeSet.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystemComponent.h"
 
 void UOverlayWidgetController::BroadcastInitialValues()
@@ -18,34 +19,45 @@ void UOverlayWidgetController::BroadcastInitialValues()
 void UOverlayWidgetController::BindCallbacksToDependencies()
 {
 	UAuraAttributeSet* Attr = CastChecked<UAuraAttributeSet>(AttributeSet);
+
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Attr->GetHealthAttribute())
-		.AddUObject(this, &UOverlayWidgetController::HealthChanged);
+		.AddLambda([this](const FOnAttributeChangeData& Data) {
+				OnHealthChanged.Broadcast(Data.NewValue);
+			});
+
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Attr->GetMaxHealthAttribute())
-		.AddUObject(this, &UOverlayWidgetController::MaxHealthChanged);
+		.AddLambda([this](const FOnAttributeChangeData& Data) {
+				OnMaxHealthChanged.Broadcast(Data.NewValue);
+			});
 
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Attr->GetManaAttribute())
-		.AddUObject(this, &UOverlayWidgetController::ManaChanged);
+		.AddLambda([this](const FOnAttributeChangeData& Data) {
+				OnManaChanged.Broadcast(Data.NewValue);
+			});
+
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Attr->GetMaxManaAttribute())
-		.AddUObject(this, &UOverlayWidgetController::MaxManaChanged);
+		.AddLambda([this](const FOnAttributeChangeData& Data) {
+				OnMaxManaChanged.Broadcast(Data.NewValue);
+			});
 
-}
+	check(MessageWidgetDataTable)
 
-void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& Data)
-{
-	OnHealthChanged.Broadcast(Data.NewValue);
-}
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
+		[this](const FGameplayTagContainer& AssetTags) {
+			
+			for (const FGameplayTag& Tag : AssetTags)
+			{
 
-void UOverlayWidgetController::MaxHealthChanged(const FOnAttributeChangeData& Data)
-{
-	OnMaxHealthChanged.Broadcast(Data.NewValue);
-}
+				//if Tags are under Message Tag, find DataTable Row And broadCast;
+				if (Tag.MatchesTag(FGameplayTag::RequestGameplayTag("Message")))
+				{
+					FUIWidgetRow* row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
 
-void UOverlayWidgetController::ManaChanged(const FOnAttributeChangeData& Data)
-{
-	OnManaChanged.Broadcast(Data.NewValue);
-}
+					MessageWidgetRowDelegate.Broadcast(*row);
+				}
 
-void UOverlayWidgetController::MaxManaChanged(const FOnAttributeChangeData& Data)
-{
-	OnMaxManaChanged.Broadcast(Data.NewValue);
+				//FTEXT("")
+			}
+		}
+	);
 }

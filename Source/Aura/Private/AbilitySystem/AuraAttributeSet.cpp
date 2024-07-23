@@ -18,10 +18,16 @@ UAuraAttributeSet::UAuraAttributeSet()
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Strength, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Intelligence, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Resilience, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Vigor, COND_None, REPNOTIFY_Always);
+
+
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Health, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Mana, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, MaxMana, COND_None, REPNOTIFY_Always); 
 }
 
 /// <summary>
@@ -47,10 +53,44 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	FEffectProperties EffectProperties;
 	SetEffectPropertis(Data, EffectProperties);
 
-	UE_LOG(LogTemp, Warning, TEXT("%f "), Data.EvaluatedData.Magnitude);
+	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+	{
+		SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
+	}
+
+
+	if (Data.EvaluatedData.Attribute == GetManaAttribute())
+	{
+		SetHealth(FMath::Clamp(GetMana(), 0.0f, GetMaxMana()));
+	}
+
+
 }
 
 
+void UAuraAttributeSet::OnRep_Strength(FGameplayAttributeData& OldStrength) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, Strength, OldStrength);
+}
+
+void UAuraAttributeSet::OnRep_Intelligence(FGameplayAttributeData& OldIntelligence) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, Intelligence, OldIntelligence);
+}
+
+void UAuraAttributeSet::OnRep_Resilience(FGameplayAttributeData& OldResilience) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, Resilience, OldResilience);
+}
+
+void UAuraAttributeSet::OnRep_Vigor(FGameplayAttributeData& OldVigor) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, Vigor, OldVigor);
+}
+
+/*
+	Vital Attributes
+*/
 void UAuraAttributeSet::OnRep_Health(FGameplayAttributeData& OldHealth) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, Health, OldHealth);

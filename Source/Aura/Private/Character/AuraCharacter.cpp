@@ -58,4 +58,7 @@ void AAuraCharacter::InitAbilityActorInfo()
 				AuraPlayerState, AbilitySystemComponent, AttributeSet);
 		}
 	}
+
+	//init primary attributes
+	InitializePrimaryAttribute();
 }

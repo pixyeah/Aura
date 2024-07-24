@@ -25,4 +25,16 @@ public:
 	// 通过 IAbilitySystemInterface 继承
 	UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	int32 GetPlayerLevel();
+
+private :
+
+	UPROPERTY(EditAnywhere, ReplicatedUsing = OnRep_Level)
+	int32 Level = 1;
+
+	UFUNCTION()
+	void OnRep_Level(int32 OldLevel);
 };

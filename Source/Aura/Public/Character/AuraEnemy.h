@@ -27,4 +27,12 @@ protected:
 
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo() override;
+
+	/* from combat interface */
+	virtual int32 GetPlayerLevel() override;
+
+
+
+	UPROPERTY(EditAnyWhere, BlueprintReadOnly,Category = "Combat");
+	int32 Level = 1;
 };

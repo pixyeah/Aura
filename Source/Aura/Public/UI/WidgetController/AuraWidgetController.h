@@ -49,6 +49,9 @@ public :
 
 	virtual void BindCallbacksToDependencies();
 
+	UFUNCTION(BlueprintCallable)
+	virtual void BroadcastInitialValues();
+
 protected:
 	
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
@@ -63,5 +66,4 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
 	TObjectPtr< UAttributeSet> AttributeSet;
 
-	virtual void BroadcastInitialValues();
 };

@@ -48,4 +48,11 @@ protected:
 
 	void InitDefaultAttribute();
 
+	void AddCharacterAbilities();
+
+private:
+
+	UPROPERTY(EditAnyWhere, Category = "Abilities")
+	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
+
 };

@@ -54,4 +54,26 @@ void FAuraGameplayTags::InitalizeNativeGameplayTags()
 	GameplayTags.Attribute_Secondary_MaxMana = UGameplayTagsManager::Get()
 		.AddNativeGameplayTag(FName("Attributes.Secondary.MaxMana"),
 		FString(TEXT("player can spell . resources")));
+
+	//Input Tag
+
+	GameplayTags.InputTag_LMB = UGameplayTagsManager::Get()
+		.AddNativeGameplayTag(FName("InputTag.LMB"),
+			FString(TEXT("Input tag for left mouse button.")));
+	GameplayTags.InputTag_RMB = UGameplayTagsManager::Get()
+		.AddNativeGameplayTag(FName("InputTag.RMB"),
+			FString(TEXT("Input tag for right mouse button.")));
+	GameplayTags.InputTag_1 = UGameplayTagsManager::Get()
+		.AddNativeGameplayTag(FName("InputTag.1"),
+			FString(TEXT("Input tag for one key.")));
+	GameplayTags.InputTag_2 = UGameplayTagsManager::Get()
+		.AddNativeGameplayTag(FName("InputTag.2"),
+			FString(TEXT("Input tag for two key.")));
+	GameplayTags.InputTag_3 = UGameplayTagsManager::Get()
+		.AddNativeGameplayTag(FName("InputTag.3"),
+			FString(TEXT("Input tag for three key.")));
+	GameplayTags.InputTag_4 = UGameplayTagsManager::Get()
+		.AddNativeGameplayTag(FName("InputTag.4"),
+			FString(TEXT("Input tag for four key.")));
+
 }

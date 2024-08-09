@@ -10,6 +10,7 @@
 void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 {
 	UAuraAttributeSet* AS = CastChecked<UAuraAttributeSet>(AttributeSet);
+	check(AttributeInfo);
 
 	for (auto& Pair : AS->TagsToAttributes)
 	{

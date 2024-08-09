@@ -11,6 +11,16 @@ void UAuraAbilitySystemComponent::AbilityActorInfoSet()
 
 }
 
+void UAuraAbilitySystemComponent::AddCharaterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities)
+{
+	for (TSubclassOf<UGameplayAbility> GameplayAbility : StartupAbilities)
+	{
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(GameplayAbility, 1);
+		GiveAbility(AbilitySpec);
+	}
+
+}
+
 /// <summary>
 /// for now. it's only broad cast Applied effect's GameplayTag (AssetTag)
 /// </summary>

@@ -29,6 +29,7 @@ void AAuraCharacter::PossessedBy(AController* NewController)
 	//UE_LOG(LogTemp, Warning, TEXT("PossessedBy"));
 	//Init Actor info for server
 	InitAbilityActorInfo();
+	AddCharacterAbilities();
 }
 
 void AAuraCharacter::OnRep_PlayerState()

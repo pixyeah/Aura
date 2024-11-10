@@ -2,8 +2,8 @@
 
 
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
-
 #include "AbilitySystem/AuraAttributeSet.h"
+#include "AbilitySystem/Abilities/AuraGameplayAbility.h"
 
 void UAuraAbilitySystemComponent::AbilityActorInfoSet()
 {
@@ -16,10 +16,47 @@ void UAuraAbilitySystemComponent::AddCharaterAbilities(const TArray<TSubclassOf<
 	for (TSubclassOf<UGameplayAbility> GameplayAbility : StartupAbilities)
 	{
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(GameplayAbility, 1);
-		GiveAbility(AbilitySpec);
+		if (const UAuraGameplayAbility* AuraAbility = CastChecked<UAuraGameplayAbility>(AbilitySpec.Ability))
+		{
+			AbilitySpec.DynamicAbilityTags.AddTag(AuraAbility->StartupInputTag);
+
+			GiveAbility(AbilitySpec);
+		}
 	}
 
 }
+
+void UAuraAbilitySystemComponent::AbilityInputTagHeld(FGameplayTag InputTag)
+{
+	if (!InputTag.IsValid()) return;
+
+	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{
+		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
+		{
+			AbilitySpecInputPressed(AbilitySpec);
+			if (!AbilitySpec.IsActive())
+			{
+				TryActivateAbility(AbilitySpec.Handle);
+			}
+		}
+	}
+	
+}
+
+void UAuraAbilitySystemComponent::AbilityInputTagReleased(FGameplayTag InputTag)
+{
+	if (!InputTag.IsValid()) return;
+
+	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{
+		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
+		{
+			AbilitySpecInputReleased(AbilitySpec);
+		}
+	}
+}
+
 
 /// <summary>
 /// for now. it's only broad cast Applied effect's GameplayTag (AssetTag)

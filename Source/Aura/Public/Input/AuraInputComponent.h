@@ -34,15 +34,15 @@ inline void UAuraInputComponent::BindAbilityActions(const UAuraInputConfig* Inpu
 		{
 			if (PressedFunc)
 			{
-				BindAction(Action.InputAction, ETriggerEvent::Started, Object, PressedFunc);
+				BindAction(Action.InputAction, ETriggerEvent::Started, Object, PressedFunc,Action.InputTag);
 			}
-			if (ReleasedFunc)
+			if (ReleaseFunc)
 			{
-				BindAction(Action.InputAction, ETriggerEvent::Completed, Object, ReleasedFunc);
+				BindAction(Action.InputAction, ETriggerEvent::Completed, Object, ReleaseFunc, Action.InputTag);
 			}
 			if (HeldFunc)
 			{
-				BindAction(Action.InputAction, ETriggerEvent::Triggered, Object, HeldFunc);
+				BindAction(Action.InputAction, ETriggerEvent::Triggered, Object, HeldFunc, Action.InputTag);
 			}
 		}
 	}

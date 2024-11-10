@@ -3,13 +3,28 @@
 
 #include "Player/AuraPlayerController.h"
 #include "EnhancedInputSubsystems.h"
-#include "EnhancedInputComponent.h"
+#include "GameplayTagContainer.h"
+#include "Input/AuraInputComponent.h"
 #include "Interact/EnemyInterface.h"
+#include "Player/AuraPlayerState.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystemBlueprintLibrary.h"
 
 AAuraPlayerController::AAuraPlayerController()
 {
 	bReplicates = true;
 
+}
+
+UAuraAbilitySystemComponent* AAuraPlayerController::GetASC()
+{
+	if (AuraAbilitySystemComponent == nullptr)
+	{
+		AuraAbilitySystemComponent = CastChecked<UAuraAbilitySystemComponent>
+			(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn<APawn>()));
+		//AuraAbilitySystemComponent = CastChecked<UAuraAbilitySystemComponent>(GetPlayerState<AAuraPlayerState>()->AbilitySystemComponent);
+	}
+	return AuraAbilitySystemComponent;
 }
 
 void AAuraPlayerController::BeginPlay()
@@ -37,8 +52,10 @@ void AAuraPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
-	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+	UAuraInputComponent* AuraInputComponent = CastChecked<UAuraInputComponent>(InputComponent);
+	AuraInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+	AuraInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed,
+		&ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 }
 
 void AAuraPlayerController::Tick(float DeltaTime)
@@ -104,4 +121,31 @@ void AAuraPlayerController::CursorTrace()
 		}
 	}
 	LastActor = ThisActor;
+}
+
+void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
+{
+	UE_LOG(LogTemp, Display, TEXT("[%s] pressed...."),*InputTag.ToString());
+}
+
+void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
+{
+	UE_LOG(LogTemp, Display, TEXT("[%s] Released...."), *InputTag.ToString());
+
+	UAuraAbilitySystemComponent* ASC = GetASC();
+	if (ASC)
+	{
+		ASC->AbilityInputTagReleased(InputTag);
+	}
+}
+
+void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
+{
+	UE_LOG(LogTemp, Display, TEXT("[%s] Held...."), *InputTag.ToString());
+
+	UAuraAbilitySystemComponent* ASC = GetASC();
+	if (ASC)
+	{
+		ASC->AbilityInputTagHeld(InputTag);
+	}
 }

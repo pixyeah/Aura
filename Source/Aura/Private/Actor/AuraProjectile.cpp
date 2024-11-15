@@ -8,6 +8,7 @@
 // Sets default values
 AAuraProjectile::AAuraProjectile()
 {
+	bReplicates = true;
 
 	Sphere = CreateDefaultSubobject<USphereComponent>("Sphere");
 	SetRootComponent(Sphere);

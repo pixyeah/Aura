@@ -17,9 +17,13 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 		true, true, FLinearColor::Green, 6);
 
 
-	const bool bIsServer = HasAuthority(&ActivationInfo);
-	if (!bIsServer) return;
+	bIsServer = HasAuthority(&ActivationInfo);
 
+}
+
+void UAuraProjectileSpell::SpawnProjectile()
+{
+	if (!bIsServer) return;
 	if (ICombatInterface* CombatIf = Cast<ICombatInterface>(GetAvatarActorFromActorInfo()))
 	{
 		AActor* OwningActor = GetOwningActorFromActorInfo();
@@ -30,10 +34,10 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 		const FVector WeaponLocation = CombatIf->GetCombatSocketLocation();
 		SpawnTransform.SetLocation(WeaponLocation);
 		AAuraProjectile* Projectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(
-			ProjectileClass, 
-			SpawnTransform, 
+			ProjectileClass,
+			SpawnTransform,
 			OwningActor,
-			Cast<APawn>(OwningActor), 
+			Cast<APawn>(OwningActor),
 			ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
 		//TODO: Give the projectile a gameplay effect spec for causing damage.

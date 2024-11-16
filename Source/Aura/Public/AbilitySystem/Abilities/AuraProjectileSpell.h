@@ -22,4 +22,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadonly)
 	TSubclassOf<AAuraProjectile> ProjectileClass;
+
+	bool bIsServer = false;
+
+	UFUNCTION(BlueprintCallable,Category = "Projectile")
+	void SpawnProjectile();
 };

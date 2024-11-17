@@ -61,6 +61,8 @@ void AAuraPlayerController::SetupInputComponent()
 
 	UAuraInputComponent* AuraInputComponent = CastChecked<UAuraInputComponent>(InputComponent);
 	AuraInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+	AuraInputComponent->BindAction(ShiftAction, ETriggerEvent::Started, this, &AAuraPlayerController::ShiftPressed);
+	AuraInputComponent->BindAction(ShiftAction, ETriggerEvent::Completed, this, &AAuraPlayerController::ShiftReleased);
 	AuraInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed,
 		&ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 }
@@ -169,27 +171,25 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 	UE_LOG(LogTemp, Display, TEXT("[%s] Released...."), *InputTag.ToString());
 
 
+	UAuraAbilitySystemComponent* ASC = GetASC();
+	if (ASC)
+	{
+		ASC->AbilityInputTagReleased(InputTag);
+	}
+
 	if (!InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
-		UAuraAbilitySystemComponent* ASC = GetASC();
-		if (ASC)
-		{
-			ASC->AbilityInputTagReleased(InputTag);
-		}
+		//UAuraAbilitySystemComponent* ASC = GetASC();
+		//if (ASC)
+		//{
+		//	ASC->AbilityInputTagReleased(InputTag);
+		//}
 		return;
 	}
 
-	if (bTargeting)
+	if (!bTargeting && !bShiftDown)
 	{
-		UAuraAbilitySystemComponent* ASC = GetASC();
-		if (ASC)
-		{
-			ASC->AbilityInputTagReleased(InputTag);
-		}
 
-	}
-	else
-	{
 		APawn* ControllerPawn = GetPawn();
 		if (FollowTime <= ShortPressThreshold && ControllerPawn)
 		{
@@ -200,7 +200,7 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 				for (const FVector& PointLoc : NavPath->PathPoints)
 				{
 					Spline->AddSplinePoint(PointLoc, ESplineCoordinateSpace::World);
-					DrawDebugSphere(GetWorld(), PointLoc, 10, 8, FColor::Green, false, 5.f);
+					//DrawDebugSphere(GetWorld(), PointLoc, 10, 8, FColor::Green, false, 5.f);
 				}
 
 				CachedDestination = NavPath->PathPoints[NavPath->PathPoints.Num() - 1];
@@ -210,7 +210,6 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 		}
 		bTargeting = false;
 		FollowTime = 0.f;
-
 	}
 }
 
@@ -228,7 +227,7 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 		return;
 	}
 
-	if (bTargeting)
+	if (bTargeting || bShiftDown)
 	{
 		UAuraAbilitySystemComponent* ASC = GetASC();
 		if (ASC)

@@ -26,5 +26,5 @@ protected:
 	bool bIsServer = false;
 
 	UFUNCTION(BlueprintCallable,Category = "Projectile")
-	void SpawnProjectile();
+	void SpawnProjectile(const FVector& TargetLocation);
 };

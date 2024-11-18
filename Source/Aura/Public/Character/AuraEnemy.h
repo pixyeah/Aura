@@ -3,8 +3,10 @@
 #include "CoreMinimal.h"
 #include "Character/AuraCharacterBase.h"
 #include "Interact/EnemyInterface.h"
+#include "UI/WidgetController/OverlayWidgetController.h"
 #include "AuraEnemy.generated.h"
 
+class UWidgetComponent;
 /**
  * 
  */
@@ -23,6 +25,11 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	bool bHighLighted = false;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangedSignature OnHealthChanged;
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangedSignature OnMaxHealthChanged;
 protected:
 
 	virtual void BeginPlay() override;
@@ -35,4 +42,8 @@ protected:
 
 	UPROPERTY(EditAnyWhere, BlueprintReadOnly,Category = "Combat");
 	int32 Level = 1;
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UWidgetComponent> HealthBar;
 };

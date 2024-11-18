@@ -15,3 +15,4 @@ Build
 *.xcodeproj
 *.xcworkspace
 .vsconfig
+/_ReSharper.Caches

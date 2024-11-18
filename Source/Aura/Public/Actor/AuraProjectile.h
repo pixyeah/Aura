@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayEffectTypes.h"
 #include "GameFramework/Actor.h"
 #include "AuraProjectile.generated.h"
 
@@ -23,6 +24,10 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float LiftSpan = 10.f;
+
+	UPROPERTY(BlueprintReadWrite,meta=(ExposeOnSpawn=true))
+	FGameplayEffectSpecHandle DamageEffectSpecHandle;
+
 
 protected:
 	// Called when the game starts or when spawned

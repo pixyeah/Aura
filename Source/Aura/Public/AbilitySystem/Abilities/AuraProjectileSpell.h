@@ -7,6 +7,7 @@
 #include "AuraProjectileSpell.generated.h"
 
 class AAuraProjectile;
+class UGameplayEffet;
 /**
  * 
  */
@@ -23,8 +24,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadonly)
 	TSubclassOf<AAuraProjectile> ProjectileClass;
 
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	TSubclassOf<UGameplayEffect> DamageEffectClass;
+
 	bool bIsServer = false;
 
 	UFUNCTION(BlueprintCallable,Category = "Projectile")
 	void SpawnProjectile(const FVector& TargetLocation);
+
 };

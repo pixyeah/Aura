@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "Character/AuraCharacterBase.h"
 #include "Interact/EnemyInterface.h"
 #include "UI/WidgetController/OverlayWidgetController.h"
@@ -34,6 +35,7 @@ protected:
 
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo() override;
+	virtual void InitDefaultAttribute() override;
 
 	/* from combat interface */
 	virtual int32 GetPlayerLevel() override;
@@ -43,6 +45,8 @@ protected:
 	UPROPERTY(EditAnyWhere, BlueprintReadOnly,Category = "Combat");
 	int32 Level = 1;
 
+	UPROPERTY(EditAnyWhere, BlueprintReadOnly, Category = "Combat");
+	ECharacterClass CharacterClass = ECharacterClass::Warrior;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> HealthBar;

@@ -8,6 +8,7 @@
 #include "Interact/CombatInterface.h"
 #include "AuraCharacterBase.generated.h"
 
+class UGameplayAbility;
 class UAbilitySystemComponent;
 class UGameplayEffect;
 
@@ -56,9 +57,13 @@ protected:
 
 	void AddCharacterAbilities();
 
+	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
+
 private:
 
 	UPROPERTY(EditAnyWhere, Category = "Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
 
+	UPROPERTY(EditAnywhere, Category="Combat")
+	TObjectPtr<UAnimMontage> HitReactMontage;
 };

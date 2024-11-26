@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "AuraGameplayTags.h"
 #include "Actor/AuraProjectile.h"
 #include "Interact/CombatInterface.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -15,12 +16,10 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	UKismetSystemLibrary::PrintString(this, FString("Activate Ability fromC++"),
-		true, true, FLinearColor::Green, 6);
-
+	//UKismetSystemLibrary::PrintString(this, FString("Activate Ability fromC++"),
+		//true, true, FLinearColor::Green, 6);
 
 	bIsServer = HasAuthority(&ActivationInfo);
-
 }
 
 void UAuraProjectileSpell::SpawnProjectile(const FVector& TargetLocation)
@@ -46,6 +45,11 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& TargetLocation)
 
 		UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
 		FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), SourceASC->MakeEffectContext());
+
+		const float ScalarDamage = Damage.GetValueAtLevel(GetAbilityLevel());
+		FAuraGameplayTags AuraGameplayTags = FAuraGameplayTags::Get();
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, AuraGameplayTags.Damage, ScalarDamage);
+
 		Projectile->DamageEffectSpecHandle = SpecHandle;
 		Projectile->FinishSpawning(SpawnTransform);
 	}

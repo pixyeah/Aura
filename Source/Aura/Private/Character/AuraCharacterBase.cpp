@@ -76,4 +76,9 @@ void AAuraCharacterBase::AddCharacterAbilities()
 	}
 }
 
+UAnimMontage* AAuraCharacterBase::GetHitReactMontage_Implementation()
+{
+	return HitReactMontage;
+}
+
 

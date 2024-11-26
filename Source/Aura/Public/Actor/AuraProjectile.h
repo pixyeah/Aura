@@ -27,8 +27,6 @@ public:
 
 	UPROPERTY(BlueprintReadWrite,meta=(ExposeOnSpawn=true))
 	FGameplayEffectSpecHandle DamageEffectSpecHandle;
-
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

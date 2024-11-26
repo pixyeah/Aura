@@ -20,9 +20,11 @@ public:
 	AAuraEnemy();
 
 	// 通过 IEnemyInterface 继承
-	void HighlightActor() override;
+	virtual void HighlightActor() override;
 
-	void UnHightlightActor() override;
+	virtual void UnHightlightActor() override;
+
+	virtual void Death() override;
 
 	UPROPERTY(BlueprintReadOnly)
 	bool bHighLighted = false;
@@ -39,6 +41,9 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Combat")
 	float BaseWalkSpeed = 250.f;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category = "Combat")
+	float DeathLifeSpan = 5.f;
 protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo() override;

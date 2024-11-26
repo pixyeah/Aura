@@ -8,6 +8,7 @@
 #include "Interact/CombatInterface.h"
 #include "AuraCharacterBase.generated.h"
 
+class UAttributeSet;
 class UGameplayAbility;
 class UAbilitySystemComponent;
 class UGameplayEffect;
@@ -19,6 +20,17 @@ class AURA_API AAuraCharacterBase : public ACharacter,public IAbilitySystemInter
 
 public:
 	AAuraCharacterBase();
+
+	// 通过 IAbilitySystemInterface 继承
+	UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+
+	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
+
+	virtual void Death() override;
+
+	UFUNCTION(NetMulticast,Reliable)
+	virtual void MuticastHandleDeath();
 
 protected:
 	virtual void BeginPlay() override;
@@ -38,9 +50,6 @@ protected:
 	TObjectPtr<class UAttributeSet> AttributeSet;
 
 
-	// 通过 IAbilitySystemInterface 继承
-	UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 
 	virtual void InitAbilityActorInfo();
 
@@ -57,7 +66,19 @@ protected:
 
 	void AddCharacterAbilities();
 
-	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
+	//Dissolve effects
+
+	void Dissolve();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartDissolveTimeline(UMaterialInstanceDynamic* DynamicMaterialInstance);
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartWeaponDissolveTimeline(UMaterialInstanceDynamic* DynamicMaterialInstance);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UMaterialInstance> DissolveMaterialInstance;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UMaterialInstance> WeaponDissolveMaterialInstance;
 
 private:
 

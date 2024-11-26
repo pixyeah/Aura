@@ -27,9 +27,12 @@ public:
 
 	virtual FVector GetCombatSocketLocation();
 
+	virtual void Death() = 0;
+
 	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable)
 	void UpdateFacingTarget(const FVector& Target);
 
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
 	UAnimMontage* GetHitReactMontage();
+
 };

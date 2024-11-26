@@ -110,3 +110,9 @@ void AAuraEnemy::UnHightlightActor()
 	Weapon->SetRenderCustomDepth(false);
 	//Weapon->SetCustomDepthStencilValue(250);
 }
+
+void AAuraEnemy::Death()
+{
+	SetLifeSpan(DeathLifeSpan);
+	Super::Death();
+}

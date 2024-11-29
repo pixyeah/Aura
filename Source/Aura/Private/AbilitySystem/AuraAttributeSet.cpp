@@ -7,7 +7,10 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AuraGameplayTags.h"
+#include "Input/AuraInputComponent.h"
 #include "Interact/CombatInterface.h"
+#include "Kismet/GameplayStatics.h"
+#include "Player/AuraPlayerController.h"
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
@@ -80,6 +83,7 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 	}
 }
 
+
 void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 
@@ -127,10 +131,21 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 				}
 
 			}
+
+			ShowFloatingText(EffectProperties, LocalIncomingDamage);
 		}
 	}
 
 
+}
+
+void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& EffectProperties, float LocalIncomingDamage) const
+{
+	AAuraPlayerController* PC = Cast<AAuraPlayerController>(UGameplayStatics::GetPlayerController(EffectProperties.SourceCharacter, 0));
+	if (PC)
+	{
+		PC->ShowDamageNumber(LocalIncomingDamage, EffectProperties.TargetCharacter);
+	}
 }
 
 

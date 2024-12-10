@@ -4,6 +4,7 @@
 #include "AbilitySystem/ModMagCalc/ExecCalc/ExecCalc_Damage.h"
 
 #include "AbilitySystemComponent.h"
+#include "AuraAbilityTypes.h"
 #include "AuraGameplayTags.h"
 #include "AbilitySystem/AuraAbilitySystemLibrary.h"
 #include "AbilitySystem/AuraAttributeSet.h"
@@ -71,6 +72,10 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	EvaluateParams.TargetTags = TargetTags;
 	UCharacterClassInfo* CharacterClassInfo = UAuraAbilitySystemLibrary::GetCharacterClassInfo(SourceAvatar);
 
+	FGameplayEffectContext* EffectContextHandle =  Spec.GetContext().Get();
+	FAuraGameplayEffectContext* AuraEffectHandle = static_cast<FAuraGameplayEffectContext*>(EffectContextHandle);
+	
+
 
 	//Get Damage Set by caller Magnitude.
 	float Damage = Spec.GetSetByCallerMagnitude(FAuraGameplayTags::Get().Damage);
@@ -81,7 +86,9 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().BlockChanceDef, EvaluateParams, TargetBlockChance);
 	TargetBlockChance = FMath::Max(0, TargetBlockChance);
 	int RandomNumber = FMath::RandRange(0, 100);
-	if (RandomNumber < TargetBlockChance)
+	bool bBlockHit = RandomNumber < TargetBlockChance;
+	AuraEffectHandle->SetIsBlockedHit(bBlockHit);
+	if ( bBlockHit)
 	{
 		Damage = Damage * 0.5f;
 	}
@@ -120,7 +127,9 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	float CriticalCoefficient = CriticalResistCurve->Eval(TargetCombat->GetPlayerLevel());
 	float RealCriticalChance = FMath::Max(0, SourceCriticalChance - TargetCriticalResistance * CriticalCoefficient);
 	int RandomCriticalNumber = FMath::RandRange(1, 100);
-	if (RandomCriticalNumber < RealCriticalChance)
+	bool bCriticalHit = RandomCriticalNumber < RealCriticalChance;
+	AuraEffectHandle->SetIsCriticalHit(bCriticalHit);
+	if (bCriticalHit)
 	{
 		float SourceCriticalDamage = 0;
 		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().CriticalHitDamageDef, EvaluateParams, SourceCriticalDamage);

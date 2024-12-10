@@ -27,7 +27,7 @@ public:
 	UAuraAbilitySystemComponent* GetASC();
 
 	UFUNCTION(Client,Reliable)
-	void ShowDamageNumber(float Damage,ACharacter* TargetCharacter);
+	void ShowDamageNumber(float Damage,ACharacter* TargetCharacter,bool bBlockedHit,bool bCriticalHit);
 
 protected:
 	virtual void BeginPlay() override;

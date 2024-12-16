@@ -36,6 +36,15 @@ UAuraAttributeSet::UAuraAttributeSet()
 	TagsToAttributes.Add(AuraGameplay.Attribute_Secondary_CriticalHitResistance, GetCriticalHitResistanceAttribute);
 	TagsToAttributes.Add(AuraGameplay.Attribute_Secondary_HealthRegeneration, GetHealthRegenerationAttribute);
 	TagsToAttributes.Add(AuraGameplay.Attribute_Secondary_ManaRegeneration, GetManaRegenerationAttribute);
+	TagsToAttributes.Add(AuraGameplay.Attribute_Secondary_MaxHealth, GetMaxHealthAttribute);
+	TagsToAttributes.Add(AuraGameplay.Attribute_Secondary_MaxMana, GetMaxManaAttribute);
+
+
+	/* damage type resistance*/
+	TagsToAttributes.Add(AuraGameplay.Attribute_Resistance_Fire, GetFireResistanceAttribute);
+	TagsToAttributes.Add(AuraGameplay.Attribute_Resistance_Lightning, GetLightningResistanceAttribute);
+	TagsToAttributes.Add(AuraGameplay.Attribute_Resistance_Arcane, GetArcaneResistanceAttribute);
+	TagsToAttributes.Add(AuraGameplay.Attribute_Resistance_Physical, GetPhysicalResistanceAttribute);
 
 }
 
@@ -62,7 +71,12 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Health, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Mana, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, MaxMana, COND_None, REPNOTIFY_Always); 
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, FireResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, LightningResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, ArcaneResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, PhysicalResistance, COND_None, REPNOTIFY_Always);
 }
 
 /// <summary>
@@ -144,7 +158,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 
 void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& EffectProperties, float LocalIncomingDamage,bool bBlockedHit,bool bCriticalHit) const
 {
-	AAuraPlayerController* PC = Cast<AAuraPlayerController>(UGameplayStatics::GetPlayerController(EffectProperties.SourceCharacter, 0));
+	AAuraPlayerController* PC = Cast<AAuraPlayerController>(EffectProperties.SourceController);
 	if (PC)
 	{
 		PC->ShowDamageNumber(LocalIncomingDamage, EffectProperties.TargetCharacter,bBlockedHit,bCriticalHit);
@@ -268,4 +282,22 @@ void UAuraAttributeSet::OnRep_MaxHealth(FGameplayAttributeData& OldMaxHealth) co
 void UAuraAttributeSet::OnRep_MaxMana(FGameplayAttributeData& OldMaxMana) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, MaxMana, OldMaxMana);
+}
+
+
+void UAuraAttributeSet::OnRep_FireResistance(FGameplayAttributeData& OldFireResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, FireResistance, OldFireResistance);
+}
+void UAuraAttributeSet::OnRep_LightningResistance(FGameplayAttributeData& OldLightningResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, LightningResistance, OldLightningResistance);
+}
+void UAuraAttributeSet::OnRep_ArcaneResistance(FGameplayAttributeData& OldArcaneResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, ArcaneResistance, OldArcaneResistance);
+}
+void UAuraAttributeSet::OnRep_PhysicalResistance(FGameplayAttributeData& OldPhysicalResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, PhysicalResistance, OldPhysicalResistance);
 }

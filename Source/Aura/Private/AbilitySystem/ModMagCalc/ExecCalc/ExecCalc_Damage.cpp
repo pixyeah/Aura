@@ -78,7 +78,12 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 
 	//Get Damage Set by caller Magnitude.
-	float Damage = Spec.GetSetByCallerMagnitude(FAuraGameplayTags::Get().Damage);
+	float Damage = 0;
+	for (auto& Pairs : FAuraGameplayTags::Get().DamageTypes)
+	{
+		const float DamageOfType = Spec.GetSetByCallerMagnitude(Pairs.Key);
+		Damage += DamageOfType;
+	}
 
 
 	//if blocked ,halve the damage 

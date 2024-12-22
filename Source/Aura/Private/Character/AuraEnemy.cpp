@@ -65,9 +65,27 @@ void AAuraEnemy::BeginPlay()
 			this,
 			&AAuraEnemy::HitReactTagChanged
 		);
+	
+	FTimerHandle Timer; 
+	GetWorld()->GetTimerManager().SetTimer(
+		Timer,            // 定时器句柄
+		this,                   // 调用函数的对象
+		&AAuraEnemy::BindAttributeChange, // 被调用的函数
+		0.5f,                   // 延迟时间（秒）
+		false                   // 是否循环
+	);
+	//GetWorld()->GetTimerManager().SetTimerForNextTick([this,AuraAS]()
+	//	{
+	//		OnMaxHealthChanged.Broadcast(AuraAS->GetMaxHealth());
+	//		OnHealthChanged.Broadcast(AuraAS->GetHealth());
+	//	});
+}
 
-	OnHealthChanged.Broadcast(AuraAS->GetHealth());
+void AAuraEnemy::BindAttributeChange()
+{
+	UAuraAttributeSet* AuraAS = CastChecked<UAuraAttributeSet>(AttributeSet);
 	OnMaxHealthChanged.Broadcast(AuraAS->GetMaxHealth());
+	OnHealthChanged.Broadcast(AuraAS->GetHealth());
 }
 
 void AAuraEnemy::HitReactTagChanged(FGameplayTag CallbackTag, int NewCount)

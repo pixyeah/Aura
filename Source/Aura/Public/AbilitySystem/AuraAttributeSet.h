@@ -202,10 +202,7 @@ public:
 	UFUNCTION()
 	void OnRep_ManaRegeneration(FGameplayAttributeData& OldManaRegeneration) const;
 
-	UFUNCTION()
-	void OnRep_Mana(FGameplayAttributeData& OldMana) const;
-	UFUNCTION()
-	void OnRep_MaxMana(FGameplayAttributeData& OldMaxMana) const;
+
 
 	UFUNCTION()
 	void OnRep_FireResistance(FGameplayAttributeData& OldFireResistance) const;
@@ -238,7 +235,10 @@ public:
 	UFUNCTION()
 	void OnRep_MaxHealth(FGameplayAttributeData& OldMaxHealth) const;
 
-
+	UFUNCTION()
+	void OnRep_Mana(FGameplayAttributeData& OldMana) const;
+	UFUNCTION()
+	void OnRep_MaxMana(FGameplayAttributeData& OldMaxMana) const;
 private:
 
 	void SetEffectPropertis(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props);

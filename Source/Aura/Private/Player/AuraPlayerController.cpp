@@ -183,7 +183,7 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 
 void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
-	UE_LOG(LogTemp, Display, TEXT("[%s] Released...."), *InputTag.ToString());
+	//UE_LOG(LogTemp, Display, TEXT("[%s] Released...."), *InputTag.ToString());
 
 
 	UAuraAbilitySystemComponent* ASC = GetASC();

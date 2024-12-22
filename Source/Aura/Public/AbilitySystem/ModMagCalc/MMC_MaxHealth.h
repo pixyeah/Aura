@@ -19,7 +19,7 @@ public :
 
 	
 protected:
-	float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
+	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
 
 private:
 	FGameplayEffectAttributeCaptureDefinition VigorDef;

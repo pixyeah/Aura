@@ -24,7 +24,7 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 
 void UAuraProjectileSpell::SpawnProjectile(const FVector& TargetLocation)
 {
-	if (!bIsServer) return;
+	if (!GetAvatarActorFromActorInfo()->HasAuthority()) return;
 	if (ICombatInterface* CombatIf = Cast<ICombatInterface>(GetAvatarActorFromActorInfo()))
 	{
 		AActor* OwningActor = GetOwningActorFromActorInfo();

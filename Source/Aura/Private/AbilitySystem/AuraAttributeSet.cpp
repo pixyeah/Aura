@@ -88,14 +88,14 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 {
 	Super::PreAttributeChange(Attribute, NewValue);
 
-	if (Attribute == GetHealthAttribute())
-	{
-		NewValue = FMath::Clamp(NewValue, 0, GetMaxHealth());
-	}
-	if (Attribute == GetManaAttribute())
-	{
-		NewValue = FMath::Clamp(NewValue, 0, GetMaxMana());
-	}
+	//if (Attribute == GetHealthAttribute())
+	//{
+	//	NewValue = FMath::Clamp(NewValue, 0, GetMaxHealth());
+	//}
+	//if (Attribute == GetManaAttribute())
+	//{
+	//	NewValue = FMath::Clamp(NewValue, 0, GetMaxMana());
+	//}
 }
 
 
@@ -109,11 +109,20 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
+		
 		SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
-		UE_LOG(LogTemp, Warning, TEXT("Changed health on %s, %s, health: %f"),
+		UE_LOG(LogTemp, Warning, TEXT("Changed health on %s, %s, health: %f   %s"),
 			*EffectProperties.TargetAvatarActor->GetName(),
 			*EffectProperties.SourceAvatarActor->GetName(),
-			GetHealth());
+			GetHealth(),
+			*Data.EffectSpec.GetContext().GetEffectCauser()->GetActorNameOrLabel());
+	}
+	if (Data.EvaluatedData.Attribute == GetMaxHealthAttribute())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Changed MaxHealth on %s, %s, MaxHealth: %f"),
+			*EffectProperties.TargetAvatarActor->GetName(),
+			*EffectProperties.SourceAvatarActor->GetName(),
+			GetMaxHealth());
 	}
 
 	if (Data.EvaluatedData.Attribute == GetManaAttribute())

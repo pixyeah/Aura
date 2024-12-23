@@ -11,6 +11,9 @@
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "UI/Widget/AuraUserWidget.h"
+#include "AI/AuraAIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "BehaviorTree/BehaviorTree.h"
 
 AAuraEnemy::AAuraEnemy()
 {
@@ -109,6 +112,16 @@ void AAuraEnemy::InitAbilityActorInfo()
 void AAuraEnemy::InitDefaultAttribute()
 {
 	UAuraAbilitySystemLibrary::InitializeDefaultAttributes(this, CharacterClass, Level, AbilitySystemComponent);
+}
+
+void AAuraEnemy::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	AuraAIController = Cast<AAuraAIController>(NewController);
+
+	AuraAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->GetBlackboardAsset());
+	AuraAIController->RunBehaviorTree(BehaviorTree);
 }
 
 int32 AAuraEnemy::GetPlayerLevel()

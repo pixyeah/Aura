@@ -8,6 +8,9 @@
 #include "AuraEnemy.generated.h"
 
 class UWidgetComponent;
+class AAuraAIController;
+class UBehaviorTree;
+
 /**
  * 
  */
@@ -48,6 +51,7 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo() override;
 	virtual void InitDefaultAttribute() override;
+	virtual void PossessedBy(AController* NewController) override;
 
 	/* from combat interface */
 	virtual int32 GetPlayerLevel() override;
@@ -63,6 +67,11 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> HealthBar;
 
+	UPROPERTY()
+	TObjectPtr<AAuraAIController> AuraAIController;
+
+	UPROPERTY(EditAnywhere, Category = "AI")
+	TObjectPtr<UBehaviorTree> BehaviorTree;
 private:
 	void BindAttributeChange();
 };

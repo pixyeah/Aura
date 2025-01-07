@@ -49,6 +49,8 @@ public:
 	FGameplayTag Damage_Physical;
 	TMap<FGameplayTag,FGameplayTag> DamageTypes;
 	FGameplayTag Effects_HitReact;
+
+	FGameplayTag Abilities_Attack;
 protected:
 private:
 	static FAuraGameplayTags GameplayTags;

@@ -29,6 +29,9 @@ public:
 
 	virtual void Death() override;
 
+	virtual void SetCombatTarget_Implementation(AActor* InCombatTarget) override;
+	virtual AActor* GetCombatTarget_Implementation() const override;
+
 	UPROPERTY(BlueprintReadOnly)
 	bool bHighLighted = false;
 
@@ -58,11 +61,16 @@ protected:
 
 
 
+
 	UPROPERTY(EditAnyWhere, BlueprintReadOnly,Category = "Combat");
 	int32 Level = 1;
 
 	UPROPERTY(EditAnyWhere, BlueprintReadOnly, Category = "Combat");
 	ECharacterClass CharacterClass = ECharacterClass::Warrior;
+
+
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	TObjectPtr<AActor> CombatTarget;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> HealthBar;
@@ -72,6 +80,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "AI")
 	TObjectPtr<UBehaviorTree> BehaviorTree;
+
 private:
 	void BindAttributeChange();
 };

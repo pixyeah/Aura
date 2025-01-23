@@ -167,10 +167,15 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 
 void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& EffectProperties, float LocalIncomingDamage,bool bBlockedHit,bool bCriticalHit) const
 {
-	AAuraPlayerController* PC = Cast<AAuraPlayerController>(EffectProperties.SourceController);
-	if (PC)
+	if (AAuraPlayerController* PC = Cast<AAuraPlayerController>(EffectProperties.SourceController))
 	{
 		PC->ShowDamageNumber(LocalIncomingDamage, EffectProperties.TargetCharacter,bBlockedHit,bCriticalHit);
+		return;
+	}
+	if (AAuraPlayerController* PC = Cast<AAuraPlayerController>(EffectProperties.TargetController))
+	{
+		PC->ShowDamageNumber(LocalIncomingDamage, EffectProperties.TargetCharacter, bBlockedHit, bCriticalHit);
+		return;
 	}
 }
 

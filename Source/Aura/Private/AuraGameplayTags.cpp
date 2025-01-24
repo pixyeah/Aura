@@ -100,6 +100,20 @@ void FAuraGameplayTags::InitalizeNativeGameplayTags()
 			FString(TEXT("Physical damage type")));
 
 	/*
+	*
+	* attack montage types
+	*/
+	GameplayTags.Montage_Attack_Weapon = UGameplayTagsManager::Get()
+		.AddNativeGameplayTag(FName("Montage.Attack.Weapon"),
+			FString(TEXT("Montage for Weapon Attack.")));
+	GameplayTags.Montage_Attack_RightHand = UGameplayTagsManager::Get()
+		.AddNativeGameplayTag(FName("Montage.Attack.RightHand"),
+			FString(TEXT("Montage for RightHand Attack.")));
+	GameplayTags.Montage_Attack_LeftHand = UGameplayTagsManager::Get()
+		.AddNativeGameplayTag(FName("Montage.Attack.LeftHand"),
+			FString(TEXT("Montage for lefthand Attack.")));
+
+	/*
 	 *
 	 * Damage Resistance
 	 */

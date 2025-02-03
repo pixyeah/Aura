@@ -149,6 +149,18 @@ void UAuraAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldC
 
 }
 
+bool UAuraAbilitySystemLibrary::IsNotFriend(AActor* FirstActor, AActor* SecondActor)
+{
+    const bool FirstIsplayer = FirstActor->ActorHasTag(FName("Player"));
+    const bool SecondIsplayer = SecondActor->ActorHasTag(FName("Player"));
+
+    const bool IsBothPlayer = FirstIsplayer && SecondIsplayer;
+
+    const bool IsBothEnemy = FirstActor->ActorHasTag(FName("Enemy")) && SecondActor->ActorHasTag(FName("Enemy"));
+
+    return !IsBothPlayer || !IsBothEnemy;
+}
+
 void UAuraAbilitySystemLibrary::SetIsCriticalHit(FGameplayEffectContextHandle& EffectContextHandle,
 	bool bInIsCriticalHit)
 {
